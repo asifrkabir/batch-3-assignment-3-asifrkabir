@@ -1,3 +1,5 @@
+import httpStatus from "http-status";
+import AppError from "../../errors/AppError";
 import { TBike } from "./bike.interface";
 import { Bike } from "./bike.model";
 
@@ -19,7 +21,20 @@ const getAllBikes = async () => {
   return result;
 };
 
+const updateBike = async (id: string, payload: Partial<TBike>) => {
+  if (!(await Bike.findById(id))) {
+    throw new AppError(httpStatus.NOT_FOUND, "Bike not found!");
+  }
+
+  const result = await Bike.findOneAndUpdate({ _id: id }, payload, {
+    new: true,
+  }).select(["-__v", "-createdAt", "-updatedAt"]);
+
+  return result;
+};
+
 export const BikeService = {
   createBike,
   getAllBikes,
+  updateBike,
 };
