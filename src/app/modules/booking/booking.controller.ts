@@ -16,6 +16,20 @@ const createBooking = catchAsync(async (req, res) => {
   });
 });
 
+const returnBike = catchAsync(async (req, res) => {
+  const { bookingId } = req.params;
+
+  const result = await BookingService.returnBike(bookingId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Bike returned successfully",
+    data: result,
+  });
+});
+
 export const BookingController = {
   createBooking,
+  returnBike,
 };

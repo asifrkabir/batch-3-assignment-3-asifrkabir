@@ -9,9 +9,15 @@ const router = Router();
 
 router.post(
   "/",
-  auth(USER_ROLE_ENUM.admin),
+  auth(USER_ROLE_ENUM.admin, USER_ROLE_ENUM.user),
   validateRequest(BookingValidations.createBookingValidationSchema),
   BookingController.createBooking
+);
+
+router.put(
+  "/:bookingId/return",
+  auth(USER_ROLE_ENUM.admin),
+  BookingController.returnBike
 );
 
 export const BookingRoutes = router;

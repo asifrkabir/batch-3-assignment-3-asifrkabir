@@ -79,6 +79,77 @@ const createBooking = async (userId: string, payload: Partial<TBooking>) => {
   }
 };
 
+const returnBike = async (bookingId: string) => {
+  const existingBooking = await Booking.findById(bookingId);
+
+  if (!existingBooking) {
+    throw new AppError(httpStatus.NOT_FOUND, "Booking not found");
+  }
+
+  const existingBike = await BikeService.getBikeById(
+    existingBooking?.bikeId?.toString()
+  );
+
+  if (!existingBike) {
+    throw new AppError(httpStatus.NOT_FOUND, "Bike not found");
+  }
+
+  const hourlyRate = existingBike?.pricePerHour;
+  const currentTime = new Date();
+  const startTime = new Date(existingBooking.startTime);
+  const timeDifferenceInMs = currentTime.getTime() - startTime.getTime();
+  const timeDifferenceInHours = Math.ceil(
+    timeDifferenceInMs / (1000 * 60 * 60)
+  );
+  const totalCost = timeDifferenceInHours * hourlyRate;
+
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    const updatedBooking = await Booking.findByIdAndUpdate(
+      { _id: bookingId },
+      { isReturned: true, returnTime: currentTime, totalCost: totalCost },
+      { new: true, session }
+    );
+
+    if (!updatedBooking) {
+      throw new AppError(httpStatus.BAD_REQUEST, "Failed to update booking");
+    }
+
+    const updatedBike = await Bike.findOneAndUpdate(
+      { _id: existingBike?.id },
+      { isAvailable: true },
+      { session }
+    );
+
+    if (!updatedBike) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        "Failed to update bike availability status"
+      );
+    }
+
+    const bookingObject = (updatedBooking as any).toObject();
+
+    delete bookingObject.__v;
+    delete bookingObject.createdAt;
+    delete bookingObject.updatedAt;
+
+    await session.commitTransaction();
+    await session.endSession();
+
+    return bookingObject;
+  } catch (err) {
+    await session.abortTransaction();
+    await session.endSession();
+
+    throw err;
+  }
+};
+
 export const BookingService = {
   createBooking,
+  returnBike,
 };
