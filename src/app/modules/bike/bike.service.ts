@@ -33,8 +33,23 @@ const updateBike = async (id: string, payload: Partial<TBike>) => {
   return result;
 };
 
+const deleteBike = async (id: string) => {
+  if (!(await Bike.findById(id))) {
+    throw new AppError(httpStatus.NOT_FOUND, "Bike not found!");
+  }
+
+  const result = await Bike.findOneAndDelete({ _id: id }).select([
+    "-__v",
+    "-createdAt",
+    "-updatedAt",
+  ]);
+
+  return result;
+};
+
 export const BikeService = {
   createBike,
   getAllBikes,
   updateBike,
+  deleteBike,
 };
