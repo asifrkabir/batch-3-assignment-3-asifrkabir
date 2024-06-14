@@ -7,7 +7,7 @@ import { BikeService } from "../bike/bike.service";
 import mongoose from "mongoose";
 import { Bike } from "../bike/bike.model";
 
-const createBooking = async (userId: string, payload: Partial<TBooking>) => {
+const createRental = async (userId: string, payload: Partial<TBooking>) => {
   // check if user exists
   const existingUser = await getExistingUserById(userId);
 
@@ -149,7 +149,14 @@ const returnBike = async (bookingId: string) => {
   }
 };
 
+const getAllRentalsByUser = async (userId: string) => {
+  const result = await Booking.find({ userId });
+
+  return result;
+};
+
 export const BookingService = {
-  createBooking,
+  createRental,
   returnBike,
+  getAllRentalsByUser,
 };
