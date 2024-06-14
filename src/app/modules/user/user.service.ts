@@ -18,7 +18,16 @@ const getUserProfile = async (id: string) => {
   return result;
 };
 
+const updateUserProfile = async (id: string, payload: Partial<TUser>) => {
+  const result = await User.findOneAndUpdate({ _id: id }, payload, {
+    new: true,
+  }).select(["-__v", "-updatedAt", "-createdAt"]);
+
+  return result;
+};
+
 export const UserService = {
   createUser,
   getUserProfile,
+  updateUserProfile,
 };
