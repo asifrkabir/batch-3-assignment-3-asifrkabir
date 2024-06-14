@@ -1,6 +1,8 @@
+import httpStatus from "http-status";
+import AppError from "../../errors/AppError";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
-import { encryptPassword } from "./user.utils";
+import { encryptPassword, getExistingUserById } from "./user.utils";
 
 const createUser = async (payload: TUser) => {
   payload.password = await encryptPassword(payload.password);
@@ -19,6 +21,12 @@ const getUserProfile = async (id: string) => {
 };
 
 const updateUserProfile = async (id: string, payload: Partial<TUser>) => {
+  const existingUser = await getExistingUserById(id);
+
+  if (!existingUser) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+
   const result = await User.findOneAndUpdate({ _id: id }, payload, {
     new: true,
   }).select(["-__v", "-updatedAt", "-createdAt"]);
