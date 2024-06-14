@@ -23,6 +23,7 @@ const createUserValidationSchema = z.object({
       invalid_type_error: "Address must be a valid string",
     }),
     role: z.enum([...USER_ROLE_LIST] as [string, ...string[]], {
+      message: "Please enter a valid role",
       required_error: "Role is required",
     }),
   }),
