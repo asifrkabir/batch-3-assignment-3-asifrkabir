@@ -1,3 +1,4 @@
+/* eslint-disable  no-unsafe-optional-chaining */
 import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
 import { TLoginUser } from "./auth.interface";

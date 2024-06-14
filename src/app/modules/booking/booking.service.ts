@@ -1,3 +1,4 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import { TBooking } from "./booking.interface";
 import { Booking } from "./booking.model";
 import { getExistingUserById } from "../user/user.utils";
