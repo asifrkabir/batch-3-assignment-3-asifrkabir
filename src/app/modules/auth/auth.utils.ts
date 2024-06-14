@@ -1,17 +1,5 @@
 import bcrypt from "bcrypt";
-import { User } from "../user/user.model";
 import jwt from "jsonwebtoken";
-
-export const getExistingUserByEmail = async (email: string) => {
-  const result = await User.findOne({ email }).select([
-    "+password",
-    "-__v",
-    "-createdAt",
-    "-updatedAt",
-  ]);
-
-  return result;
-};
 
 export const isPasswordValid = async (
   userInputPassword: string,

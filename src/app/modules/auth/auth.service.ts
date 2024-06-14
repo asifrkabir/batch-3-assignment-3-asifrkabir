@@ -1,13 +1,10 @@
 import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
 import { TLoginUser } from "./auth.interface";
-import {
-  createToken,
-  getExistingUserByEmail,
-  isPasswordValid,
-} from "./auth.utils";
+import { createToken, isPasswordValid } from "./auth.utils";
 import { TUser } from "../user/user.interface";
 import config from "../../config";
+import { getExistingUserByEmail } from "../user/user.utils";
 
 const loginUser = async (payload: TLoginUser) => {
   const { email, password } = payload;

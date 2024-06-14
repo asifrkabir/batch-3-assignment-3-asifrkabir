@@ -12,6 +12,13 @@ const createUser = async (payload: TUser) => {
   return result;
 };
 
+const getUserProfile = async (id: string) => {
+  const result = await User.findById(id);
+
+  return result;
+};
+
 export const UserService = {
   createUser,
+  getUserProfile,
 };
