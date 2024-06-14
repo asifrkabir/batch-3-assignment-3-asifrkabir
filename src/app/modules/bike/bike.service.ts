@@ -47,9 +47,16 @@ const deleteBike = async (id: string) => {
   return result;
 };
 
+export const getBikeById = async (id: string) => {
+  const result = await Bike.findById(id);
+
+  return result;
+};
+
 export const BikeService = {
   createBike,
   getAllBikes,
   updateBike,
   deleteBike,
+  getBikeById,
 };

@@ -12,11 +12,11 @@ const loginUser = async (payload: TLoginUser) => {
   const existingUser = await getExistingUserByEmail(email);
 
   if (!existingUser) {
-    throw new AppError(httpStatus.NOT_FOUND, "User not found!");
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
   }
 
   if (!(await isPasswordValid(password, existingUser?.password))) {
-    throw new AppError(httpStatus.FORBIDDEN, "Password is incorrect!");
+    throw new AppError(httpStatus.FORBIDDEN, "Password is incorrect");
   }
 
   const jwtPayload = {
