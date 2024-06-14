@@ -1,16 +1,16 @@
 import httpStatus from "http-status";
 import catchAsync from "../../utils/catchAsync";
-import sendResponse from "../../utils/sendResponse";
 import { AuthService } from "./auth.service";
 
 const loginUser = catchAsync(async (req, res) => {
   const result = await AuthService.loginUser(req.body);
 
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
+  res.status(httpStatus.OK).json({
     success: true,
+    statusCode: httpStatus.OK,
     message: "User logged in successfully",
-    data: result,
+    token: result.accessToken,
+    data: result.existingUser,
   });
 });
 

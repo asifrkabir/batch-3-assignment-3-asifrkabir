@@ -1,8 +1,13 @@
 import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
 import { TLoginUser } from "./auth.interface";
-import { getExistingUserByEmail, isPasswordValid } from "./auth.utils";
+import {
+  createToken,
+  getExistingUserByEmail,
+  isPasswordValid,
+} from "./auth.utils";
 import { TUser } from "../user/user.interface";
+import config from "../../config";
 
 const loginUser = async (payload: TLoginUser) => {
   const { email, password } = payload;
@@ -17,9 +22,20 @@ const loginUser = async (payload: TLoginUser) => {
     throw new AppError(httpStatus.FORBIDDEN, "Password is incorrect!");
   }
 
+  const jwtPayload = {
+    userId: (existingUser?._id).toString(),
+    role: existingUser?.role,
+  };
+
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    config.jwt_access_expires_in as string
+  );
+
   (existingUser as Partial<TUser>).password = undefined;
 
-  return existingUser;
+  return { accessToken, existingUser };
 };
 
 export const AuthService = {
