@@ -13,6 +13,13 @@ const createBike = async (payload: TBike) => {
   return bikeObject;
 };
 
+const getAllBikes = async () => {
+  const result = await Bike.find().select(["-__v", "-createdAt", "-updatedAt"]);
+
+  return result;
+};
+
 export const BikeService = {
   createBike,
+  getAllBikes,
 };
