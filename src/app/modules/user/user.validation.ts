@@ -32,8 +32,14 @@ const createUserValidationSchema = z.object({
 const updateUserValidationSchema = z.object({
   body: z.object({
     name: z.string().optional(),
+    email: z.string().email({ message: "Invalid email address" }).optional(),
     phone: z.string().optional(),
     address: z.string().optional(),
+    role: z
+      .enum([...USER_ROLE_LIST] as [string, ...string[]], {
+        message: "Please enter a valid role",
+      })
+      .optional(),
   }),
 });
 
