@@ -5,6 +5,15 @@ import { User } from "./user.model";
 import { encryptPassword, getExistingUserById } from "./user.utils";
 
 const createUser = async (payload: TUser) => {
+  const existingUser = await User.findOne({ email: payload.email });
+
+  if (existingUser) {
+    throw new AppError(
+      httpStatus.CONFLICT,
+      "User already exists with this email. Please use a different email address"
+    );
+  }
+
   payload.password = await encryptPassword(payload.password);
 
   const result = await User.create(payload);
