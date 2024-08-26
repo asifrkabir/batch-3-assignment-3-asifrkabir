@@ -13,7 +13,7 @@ const loginUser = async (payload: TLoginUser) => {
   const existingUser = await getExistingUserByEmail(email);
 
   if (!existingUser) {
-    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+    throw new AppError(httpStatus.BAD_REQUEST, "User not found");
   }
 
   if (!(await isPasswordValid(password, existingUser?.password))) {
