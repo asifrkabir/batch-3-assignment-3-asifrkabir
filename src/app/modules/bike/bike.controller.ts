@@ -15,20 +15,22 @@ const createBike = catchAsync(async (req, res) => {
 });
 
 const getAllBikes = catchAsync(async (req, res) => {
-  const result = await BikeService.getAllBikes();
+  const result = await BikeService.getAllBikes(req.query);
 
-  if (result.length > 0) {
-    sendResponse(res, {
-      success: true,
+  if (result?.result?.length <= 0) {
+    res.status(httpStatus.OK).json({
+      success: false,
       statusCode: httpStatus.OK,
-      message: "Bikes retrieved successfully",
-      data: result,
+      message: "No Data Found",
+      data: result?.result,
     });
   } else {
-    res.status(200).json({
-      success: false,
-      message: "No Data Found",
-      data: result,
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Bikes retrieved successfully",
+      meta: result.meta,
+      data: result.result,
     });
   }
 });

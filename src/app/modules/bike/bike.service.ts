@@ -3,6 +3,8 @@ import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
 import { TBike } from "./bike.interface";
 import { Bike } from "./bike.model";
+import QueryBuilder from "../../builder/QueryBuilder";
+import { bikeSearchableFields } from "./bike.constant";
 
 const createBike = async (payload: TBike) => {
   const result = await Bike.create(payload);
@@ -16,10 +18,21 @@ const createBike = async (payload: TBike) => {
   return bikeObject;
 };
 
-const getAllBikes = async () => {
-  const result = await Bike.find().select(["-__v", "-createdAt", "-updatedAt"]);
+const getAllBikes = async (query: Record<string, unknown>) => {
+  const bikeQuery = new QueryBuilder(Bike.find(), query)
+    .search(bikeSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
 
-  return result;
+  const result = await bikeQuery.modelQuery;
+  const meta = await bikeQuery.countTotal();
+
+  return {
+    meta,
+    result,
+  };
 };
 
 const updateBike = async (id: string, payload: Partial<TBike>) => {
