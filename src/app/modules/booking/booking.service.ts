@@ -7,6 +7,8 @@ import httpStatus from "http-status";
 import { BikeService } from "../bike/bike.service";
 import mongoose from "mongoose";
 import { Bike } from "../bike/bike.model";
+import { bookingSearchableFields } from "./booking.constant";
+import QueryBuilder from "../../builder/QueryBuilder";
 
 const createRental = async (userId: string, payload: Partial<TBooking>) => {
   // check if user exists
@@ -150,10 +152,24 @@ const returnBike = async (bookingId: string) => {
   }
 };
 
-const getAllRentalsByUser = async (userId: string) => {
-  const result = await Booking.find({ userId });
+const getAllRentalsByUser = async (
+  userId: string,
+  query: Record<string, unknown>
+) => {
+  const rentalQuery = new QueryBuilder(Booking.find({ userId }), query)
+    .search(bookingSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
 
-  return result;
+  const result = await rentalQuery.modelQuery;
+  const meta = await rentalQuery.countTotal();
+
+  return {
+    meta,
+    result,
+  };
 };
 
 export const BookingService = {

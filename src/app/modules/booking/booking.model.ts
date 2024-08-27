@@ -31,6 +31,15 @@ const bookingSchema = new Schema<TBooking>(
       required: true,
       default: false,
     },
+    paymentAmount: {
+      type: Number,
+      required: true,
+    },
+    paymentStatus: {
+      type: String,
+      required: true,
+      default: "unpaid",
+    },
   },
   {
     timestamps: true,

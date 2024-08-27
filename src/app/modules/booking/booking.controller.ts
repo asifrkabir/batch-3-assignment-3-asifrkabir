@@ -32,20 +32,22 @@ const returnBike = catchAsync(async (req, res) => {
 const getAllRentalsByUser = catchAsync(async (req, res) => {
   const { userId } = req.user;
 
-  const result = await BookingService.getAllRentalsByUser(userId);
+  const result = await BookingService.getAllRentalsByUser(userId, req.query);
 
-  if (result.length > 0) {
+  if (result?.result?.length <= 0) {
+    res.status(httpStatus.OK).json({
+      success: false,
+      statusCode: httpStatus.OK,
+      message: "No Data Found",
+      data: result?.result,
+    });
+  } else {
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Rentals retrieved successfully",
-      data: result,
-    });
-  } else {
-    res.status(200).json({
-      success: false,
-      message: "No Data Found",
-      data: result,
+      meta: result.meta,
+      data: result.result,
     });
   }
 });

@@ -12,6 +12,10 @@ const createBookingValidationSchema = z.object({
         invalid_type_error: "Start time must be a valid date",
       })
       .datetime(),
+    paymentAmount: z.number({
+      required_error: "Payment amount is required",
+      invalid_type_error: "Payment amount must be a valid number",
+    }),
   }),
 });
 
