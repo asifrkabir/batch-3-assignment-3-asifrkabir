@@ -26,11 +26,33 @@ const getAllBikes = catchAsync(async (req, res) => {
     });
   } else {
     sendResponse(res, {
-      statusCode: httpStatus.OK,
       success: true,
+      statusCode: httpStatus.OK,
       message: "Bikes retrieved successfully",
       meta: result.meta,
       data: result.result,
+    });
+  }
+});
+
+const getBikeById = catchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  const result = await BikeService.getBikeById(id);
+
+  if (!result) {
+    res.status(httpStatus.OK).json({
+      success: false,
+      statusCode: httpStatus.NOT_FOUND,
+      message: "No data found",
+      data: result,
+    });
+  } else {
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Bike retrieved successfully",
+      data: result,
     });
   }
 });
@@ -64,6 +86,7 @@ const deleteBike = catchAsync(async (req, res) => {
 export const BikeController = {
   createBike,
   getAllBikes,
+  getBikeById,
   updateBike,
   deleteBike,
 };
