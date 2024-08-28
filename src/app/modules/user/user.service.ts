@@ -3,6 +3,8 @@ import AppError from "../../errors/AppError";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
 import { encryptPassword, getExistingUserById } from "./user.utils";
+import QueryBuilder from "../../builder/QueryBuilder";
+import { userSearchableFields } from "./user.constant";
 
 const createUser = async (payload: TUser) => {
   const existingUser = await User.findOne({ email: payload.email });
@@ -21,6 +23,23 @@ const createUser = async (payload: TUser) => {
   (result as Partial<TUser>).password = undefined;
 
   return result;
+};
+
+const getAllUsers = async (query: Record<string, unknown>) => {
+  const userQuery = new QueryBuilder(User.find(), query)
+    .search(userSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await userQuery.modelQuery;
+  const meta = await userQuery.countTotal();
+
+  return {
+    meta,
+    result,
+  };
 };
 
 const getUserProfile = async (id: string) => {
@@ -45,6 +64,7 @@ const updateUserProfile = async (id: string, payload: Partial<TUser>) => {
 
 export const UserService = {
   createUser,
+  getAllUsers,
   getUserProfile,
   updateUserProfile,
 };

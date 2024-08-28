@@ -7,6 +7,8 @@ import { UserValidations } from "./user.validation";
 
 const router = Router();
 
+router.get("/",auth(USER_ROLE_ENUM.admin), UserController.getAllUsers);
+
 router.get(
   "/me",
   auth(USER_ROLE_ENUM.admin, USER_ROLE_ENUM.user),

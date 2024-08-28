@@ -4,3 +4,11 @@ export const USER_ROLE_ENUM = {
   admin: "admin",
   user: "user",
 } as const;
+
+export const userSearchableFields = [
+  "name",
+  "email",
+  "phone",
+  "address",
+  "role",
+];

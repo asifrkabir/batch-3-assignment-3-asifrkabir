@@ -14,6 +14,27 @@ const createUser = catchAsync(async (req, res) => {
   });
 });
 
+const getAllUsers = catchAsync(async (req, res) => {
+  const result = await UserService.getAllUsers(req.query);
+
+  if (result?.result?.length <= 0) {
+    res.status(httpStatus.OK).json({
+      success: false,
+      statusCode: httpStatus.OK,
+      message: "No Data Found",
+      data: result?.result,
+    });
+  } else {
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Users retrieved successfully",
+      meta: result.meta,
+      data: result.result,
+    });
+  }
+});
+
 const getUserProfile = catchAsync(async (req, res) => {
   const { userId } = req.user;
 
@@ -42,6 +63,7 @@ const updateUserProfile = catchAsync(async (req, res) => {
 
 export const UserController = {
   createUser,
+  getAllUsers,
   getUserProfile,
   updateUserProfile,
 };
