@@ -11,7 +11,10 @@ import { bookingSearchableFields } from "./booking.constant";
 import QueryBuilder from "../../builder/QueryBuilder";
 
 const getAllRentals = async (query: Record<string, unknown>) => {
-  const rentalQuery = new QueryBuilder(Booking.find().populate("bikeId"), query)
+  const rentalQuery = new QueryBuilder(
+    Booking.find().populate("bikeId").populate("userId"),
+    query
+  )
     .search(bookingSearchableFields)
     .filter()
     .sort()
