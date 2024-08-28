@@ -10,6 +10,23 @@ import { Bike } from "../bike/bike.model";
 import { bookingSearchableFields } from "./booking.constant";
 import QueryBuilder from "../../builder/QueryBuilder";
 
+const getAllRentals = async (query: Record<string, unknown>) => {
+  const rentalQuery = new QueryBuilder(Booking.find().populate("bikeId"), query)
+    .search(bookingSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await rentalQuery.modelQuery;
+  const meta = await rentalQuery.countTotal();
+
+  return {
+    meta,
+    result,
+  };
+};
+
 const createRental = async (userId: string, payload: Partial<TBooking>) => {
   // check if user exists
   const existingUser = await getExistingUserById(userId);
@@ -176,6 +193,7 @@ const getAllRentalsByUser = async (
 };
 
 export const BookingService = {
+  getAllRentals,
   createRental,
   returnBike,
   getAllRentalsByUser,

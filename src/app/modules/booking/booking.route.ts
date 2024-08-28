@@ -7,6 +7,8 @@ import { BookingController } from "./booking.controller";
 
 const router = Router();
 
+router.get("/all", auth(USER_ROLE_ENUM.admin), BookingController.getAllRentals);
+
 router.post(
   "/",
   auth(USER_ROLE_ENUM.admin, USER_ROLE_ENUM.user),

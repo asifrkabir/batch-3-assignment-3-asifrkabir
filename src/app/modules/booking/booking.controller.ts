@@ -3,6 +3,27 @@ import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { BookingService } from "./booking.service";
 
+const getAllRentals = catchAsync(async (req, res) => {
+  const result = await BookingService.getAllRentals(req.query);
+
+  if (result?.result?.length <= 0) {
+    res.status(httpStatus.OK).json({
+      success: false,
+      statusCode: httpStatus.OK,
+      message: "No Data Found",
+      data: result?.result,
+    });
+  } else {
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Rentals retrieved successfully",
+      meta: result.meta,
+      data: result.result,
+    });
+  }
+});
+
 const createRental = catchAsync(async (req, res) => {
   const { userId } = req.user;
 
@@ -53,6 +74,7 @@ const getAllRentalsByUser = catchAsync(async (req, res) => {
 });
 
 export const BookingController = {
+  getAllRentals,
   createRental,
   returnBike,
   getAllRentalsByUser,
