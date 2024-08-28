@@ -156,7 +156,10 @@ const getAllRentalsByUser = async (
   userId: string,
   query: Record<string, unknown>
 ) => {
-  const rentalQuery = new QueryBuilder(Booking.find({ userId }), query)
+  const rentalQuery = new QueryBuilder(
+    Booking.find({ userId }).populate("bikeId"),
+    query
+  )
     .search(bookingSearchableFields)
     .filter()
     .sort()
