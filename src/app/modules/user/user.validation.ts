@@ -43,7 +43,16 @@ const updateUserValidationSchema = z.object({
   }),
 });
 
+const updateUserRoleValidationSchema = z.object({
+  body: z.object({
+    role: z.enum([...USER_ROLE_LIST] as [string, ...string[]], {
+      message: "Please enter a valid role",
+    }),
+  }),
+});
+
 export const UserValidations = {
   createUserValidationSchema,
   updateUserValidationSchema,
+  updateUserRoleValidationSchema,
 };

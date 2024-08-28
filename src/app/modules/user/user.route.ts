@@ -22,6 +22,13 @@ router.put(
   UserController.updateUserProfile
 );
 
+router.patch(
+  "/:id",
+  auth(USER_ROLE_ENUM.admin),
+  validateRequest(UserValidations.updateUserRoleValidationSchema),
+  UserController.updateUserRole
+);
+
 router.delete("/:id", auth(USER_ROLE_ENUM.admin), UserController.deleteUser);
 
 export const UserRoutes = router;
