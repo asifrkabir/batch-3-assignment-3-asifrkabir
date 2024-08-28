@@ -7,7 +7,7 @@ import { UserValidations } from "./user.validation";
 
 const router = Router();
 
-router.get("/",auth(USER_ROLE_ENUM.admin), UserController.getAllUsers);
+router.get("/", auth(USER_ROLE_ENUM.admin), UserController.getAllUsers);
 
 router.get(
   "/me",
@@ -21,5 +21,7 @@ router.put(
   validateRequest(UserValidations.updateUserValidationSchema),
   UserController.updateUserProfile
 );
+
+router.delete("/:id", auth(USER_ROLE_ENUM.admin), UserController.deleteUser);
 
 export const UserRoutes = router;

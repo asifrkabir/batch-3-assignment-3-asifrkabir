@@ -62,9 +62,24 @@ const updateUserProfile = async (id: string, payload: Partial<TUser>) => {
   return result;
 };
 
+const deleteUser = async (id: string) => {
+  if (!(await User.findById(id))) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found!");
+  }
+
+  const result = await User.findOneAndDelete({ _id: id }).select([
+    "-__v",
+    "-createdAt",
+    "-updatedAt",
+  ]);
+
+  return result;
+};
+
 export const UserService = {
   createUser,
   getAllUsers,
   getUserProfile,
   updateUserProfile,
+  deleteUser,
 };
