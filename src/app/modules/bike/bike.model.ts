@@ -35,6 +35,9 @@ const bikeSchema = new Schema<TBike>(
       type: String,
       required: true,
     },
+    image: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

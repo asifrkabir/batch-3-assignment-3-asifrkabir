@@ -31,6 +31,9 @@ const createBikeValidationSchema = z.object({
       required_error: "Brand is required",
       invalid_type_error: "Brand must be a valid string",
     }),
+    image: z
+      .string({ invalid_type_error: "Image URL must be a valid string" })
+      .optional(),
   }),
 });
 
@@ -44,6 +47,7 @@ const updateBikeValidationSchema = z.object({
     year: z.number().optional(),
     model: z.string().optional(),
     brand: z.string().optional(),
+    image: z.string().optional(),
   }),
 });
 
