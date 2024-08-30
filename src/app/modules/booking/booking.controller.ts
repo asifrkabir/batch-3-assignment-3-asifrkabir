@@ -73,9 +73,23 @@ const getAllRentalsByUser = catchAsync(async (req, res) => {
   }
 });
 
+const updateRental = catchAsync(async (req, res) => {
+  const { bookingId } = req.params;
+
+  const result = await BookingService.updateRental(bookingId, req.body);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Rental updated successfully",
+    data: result,
+  });
+});
+
 export const BookingController = {
   getAllRentals,
   createRental,
   returnBike,
   getAllRentalsByUser,
+  updateRental,
 };

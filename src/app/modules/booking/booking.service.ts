@@ -195,9 +195,22 @@ const getAllRentalsByUser = async (
   };
 };
 
+const updateRental = async (id: string, payload: Partial<TBooking>) => {
+  if (!(await Booking.findById(id))) {
+    throw new AppError(httpStatus.NOT_FOUND, "Rental not found!");
+  }
+
+  const result = await Booking.findOneAndUpdate({ _id: id }, payload, {
+    new: true,
+  }).select(["-__v", "-createdAt", "-updatedAt"]);
+
+  return result;
+};
+
 export const BookingService = {
   getAllRentals,
   createRental,
   returnBike,
   getAllRentalsByUser,
+  updateRental,
 };

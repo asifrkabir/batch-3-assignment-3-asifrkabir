@@ -28,4 +28,11 @@ router.get(
   BookingController.getAllRentalsByUser
 );
 
+router.patch(
+  "/:bookingId",
+  validateRequest(BookingValidations.updateBookingValidationSchema),
+  auth(USER_ROLE_ENUM.admin, USER_ROLE_ENUM.user),
+  BookingController.updateRental
+);
+
 export const BookingRoutes = router;

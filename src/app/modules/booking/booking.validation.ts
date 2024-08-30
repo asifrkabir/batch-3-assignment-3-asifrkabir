@@ -19,6 +19,20 @@ const createBookingValidationSchema = z.object({
   }),
 });
 
+const updateBookingValidationSchema = z.object({
+  body: z.object({
+    paymentAmount: z.number({
+      required_error: "Payment amount is required",
+      invalid_type_error: "Payment amount must be a valid number",
+    }),
+    paymentStatus: z.string({
+      required_error: "Payment Status is required",
+      invalid_type_error: "Payment Status must be a string",
+    }),
+  }),
+});
+
 export const BookingValidations = {
   createBookingValidationSchema,
+  updateBookingValidationSchema,
 };
