@@ -16,7 +16,11 @@ router.post(
 
 router.get("/", BikeController.getAllBikes);
 
-router.get("/:id", BikeController.getBikeById);
+router.get(
+  "/:id",
+  auth(USER_ROLE_ENUM.admin, USER_ROLE_ENUM.user),
+  BikeController.getBikeById
+);
 
 router.put(
   "/:id",
