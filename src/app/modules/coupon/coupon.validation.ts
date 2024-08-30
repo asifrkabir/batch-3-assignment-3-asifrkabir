@@ -15,18 +15,18 @@ const createCouponValidationSchema = z.object({
       })
       .min(1, "Discount Percentage must be at least 1")
       .max(100, "Discount Percentage cannot be greater than 100"),
-    startTime: z
-      .string({
-        required_error: "Start time is required",
-        invalid_type_error: "Start time must be a valid date",
-      })
-      .datetime(),
-    endTime: z
-      .string({
-        required_error: "End time is required",
-        invalid_type_error: "End time must be a valid date",
-      })
-      .datetime(),
+    // startTime: z
+    //   .string({
+    //     required_error: "Start time is required",
+    //     invalid_type_error: "Start time must be a valid date",
+    //   })
+    //   .datetime(),
+    // endTime: z
+    //   .string({
+    //     required_error: "End time is required",
+    //     invalid_type_error: "End time must be a valid date",
+    //   })
+    //   .datetime(),
   }),
 });
 
@@ -45,18 +45,18 @@ const updateCouponValidationSchema = z.object({
       .min(1, "Discount Percentage must be at least 1")
       .max(100, "Discount Percentage cannot be greater than 100")
       .optional(),
-    startTime: z
-      .string({
-        invalid_type_error: "Start time must be a valid date",
-      })
-      .datetime()
-      .optional(),
-    endTime: z
-      .string({
-        invalid_type_error: "End time must be a valid date",
-      })
-      .datetime()
-      .optional(),
+    // startTime: z
+    //   .string({
+    //     invalid_type_error: "Start time must be a valid date",
+    //   })
+    //   .datetime()
+    //   .optional(),
+    // endTime: z
+    //   .string({
+    //     invalid_type_error: "End time must be a valid date",
+    //   })
+    //   .datetime()
+    //   .optional(),
   }),
 });
 

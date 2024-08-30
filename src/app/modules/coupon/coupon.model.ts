@@ -14,11 +14,11 @@ const couponSchema = new Schema<TCoupon>(
     },
     startTime: {
       type: Date,
-      required: true,
+      // required: true,
     },
     endTime: {
       type: Date,
-      required: true,
+      // required: true,
     },
   },
   {
