@@ -131,9 +131,27 @@ const returnBike = async (bookingId: string) => {
   try {
     session.startTransaction();
 
+    let updateData;
+
+    if (timeDifferenceInMs < 0) {
+      updateData = {
+        isReturned: true,
+        returnTime: currentTime,
+        totalCost: 0,
+        paymentAmount: 0,
+        paymentStatus: "paid",
+      };
+    } else {
+      updateData = {
+        isReturned: true,
+        returnTime: currentTime,
+        totalCost: totalCost,
+      };
+    }
+
     const updatedBooking = await Booking.findByIdAndUpdate(
       { _id: bookingId },
-      { isReturned: true, returnTime: currentTime, totalCost: totalCost },
+      { ...updateData },
       { new: true, session }
     );
 
