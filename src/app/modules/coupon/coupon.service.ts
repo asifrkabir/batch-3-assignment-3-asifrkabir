@@ -2,8 +2,8 @@ import httpStatus from "http-status";
 import QueryBuilder from "../../builder/QueryBuilder";
 import AppError from "../../errors/AppError";
 import { couponSearchableFields } from "./coupon.constant";
-import { TCoupon } from "./coupon.interface";
-import { Coupon } from "./coupon.model";
+import { TCoupon, TUserCoupon } from "./coupon.interface";
+import { Coupon, UserCoupon } from "./coupon.model";
 
 const createCoupon = async (payload: TCoupon) => {
   const result = await Coupon.create(payload);
@@ -60,10 +60,49 @@ const deleteCoupon = async (id: string) => {
   return result;
 };
 
+const assignCouponToUser = async (payload: TUserCoupon) => {
+  const { user } = payload;
+
+  const existingUserCoupon = await UserCoupon.find({ user, isUsed: true });
+
+  if (!existingUserCoupon) {
+    throw new AppError(
+      httpStatus.CONFLICT,
+      "User already has an active coupon"
+    );
+  }
+
+  const result = await UserCoupon.create(payload);
+
+  return result;
+};
+
+const getUserCouponByUserId = async (userId: string) => {
+  const result = await UserCoupon.findOne({
+    user: userId,
+    isUsed: false,
+  }).populate("coupon");
+
+  return result;
+};
+
+const updateUserCoupon = async (userCouponId: string) => {
+  const result = await UserCoupon.findOneAndUpdate(
+    { _id: userCouponId },
+    { isUsed: true },
+    { new: true }
+  );
+
+  return result;
+};
+
 export const CouponService = {
   createCoupon,
   getAllCoupons,
   getCouponById,
   updateCoupon,
   deleteCoupon,
+  assignCouponToUser,
+  getUserCouponByUserId,
+  updateUserCoupon,
 };

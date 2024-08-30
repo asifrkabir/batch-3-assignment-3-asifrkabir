@@ -83,10 +83,59 @@ const deleteCoupon = catchAsync(async (req, res) => {
   });
 });
 
+const assignCouponToUser = catchAsync(async (req, res) => {
+  const result = await CouponService.assignCouponToUser(req.body);
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Coupon assigned to user successfully",
+    data: result,
+  });
+});
+
+const getUserCouponByUserId = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+
+  const result = await CouponService.getUserCouponByUserId(userId);
+
+  if (!result) {
+    res.status(httpStatus.OK).json({
+      success: false,
+      statusCode: httpStatus.OK,
+      message: "No data found",
+      data: result,
+    });
+  }
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User Coupon retrieved successfully",
+    data: result,
+  });
+});
+
+const updateUserCoupon = catchAsync(async (req, res) => {
+  const { userCouponId } = req.params;
+
+  const result = await CouponService.updateUserCoupon(userCouponId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User Coupon updated successfully",
+    data: result,
+  });
+});
+
 export const CouponController = {
   createCoupon,
   getAllCoupons,
   getCouponById,
   updateCoupon,
   deleteCoupon,
+  assignCouponToUser,
+  getUserCouponByUserId,
+  updateUserCoupon,
 };

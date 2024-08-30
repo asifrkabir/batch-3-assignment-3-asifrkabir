@@ -31,4 +31,22 @@ router.delete(
   CouponController.deleteCoupon
 );
 
+router.post(
+  "/user",
+  auth(USER_ROLE_ENUM.admin, USER_ROLE_ENUM.user),
+  CouponController.assignCouponToUser
+);
+
+router.get(
+  "/user/:userId",
+  auth(USER_ROLE_ENUM.admin, USER_ROLE_ENUM.user),
+  CouponController.getUserCouponByUserId
+);
+
+router.patch(
+  "/user/:userCouponId",
+  auth(USER_ROLE_ENUM.admin, USER_ROLE_ENUM.user),
+  CouponController.updateUserCoupon
+);
+
 export const CouponRoutes = router;

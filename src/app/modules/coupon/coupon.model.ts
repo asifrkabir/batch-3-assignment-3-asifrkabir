@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { TCoupon } from "./coupon.interface";
+import { TCoupon, TUserCoupon } from "./coupon.interface";
 
 const couponSchema = new Schema<TCoupon>(
   {
@@ -27,3 +27,23 @@ const couponSchema = new Schema<TCoupon>(
 );
 
 export const Coupon = model<TCoupon>("Coupon", couponSchema);
+
+const userCouponSchema = new Schema<TUserCoupon>({
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  coupon: {
+    type: Schema.Types.ObjectId,
+    ref: "Coupon",
+    required: true,
+  },
+  isUsed: {
+    type: Boolean,
+    default: false,
+    required: true,
+  },
+});
+
+export const UserCoupon = model<TUserCoupon>("UserCoupon", userCouponSchema);
